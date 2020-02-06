@@ -18,3 +18,11 @@ $ python manage.py startapp blog
 or
 $ django-admin startapp blog
 ```
+## after editting model run makemigrations
+```
+$ python manage.py makemigrations
+```
+## create superuser -- first user
+```
+$ python manage.py createsuperuser
+```
