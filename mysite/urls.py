@@ -19,11 +19,6 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
      path('polls/', include('polls.urls')   ),
-<<<<<<< HEAD
      path('blog/', include(('blog.urls','blog'),namespace='blog')   ),
      path('login/',include(('account.urls','login'),namespace="login") ),
-=======
-     path('blog/', include('blog.urls')   ),
-     path('login/',include('account.urls') ),
->>>>>>> a563a33736ef561a598df1270eb4ad4091de542e
 ]
