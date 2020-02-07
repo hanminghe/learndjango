@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %} login  {% endblock %}
+{% block content %}
+{% if form.errors %}
+  <p>wrong match</p>
+{% endif %}
+<div class="row text-center ">
+    <p>Input your username and password</p>
+</div>
+<div class="vertical-middle-sm">
+    <form class="form-horizontal" action="{% url 'account:login' %}" method="post">
+        {%  csrf_token %}
+        <div class="form-group">
+            <label for="{{form.username.id_for_label}}">
+                <span class="glyphicon glyphicon-user"></span>
+                Username
+            </label>
+            {{form.username}}
+        </div>
+        <div class="form-group">
+            <label for="{{form.password.id_for_label}}">
+                <span class="glyphicon glyphicon-floppy-open"></span>
+                Password
+            </label>
+            {{form.password}}
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login">
+    </form>
+</div>
+{% endblock %}

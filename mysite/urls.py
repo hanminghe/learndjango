@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
      path('polls/', include('polls.urls')   ),
      path('blog/', include(('blog.urls','blog'),namespace='blog')   ),
-     path('login/',include(('account.urls','login'),namespace="login") ),
+     path('account/',include(('account.urls','login'),namespace="account") ),
 ]
