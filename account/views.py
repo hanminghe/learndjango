@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .form import LoginForm
+from .form import LoginForm, RegistrationForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login
 # Create your views here.
@@ -17,3 +17,18 @@ def userlogin(request):
                 return HttpResponse("logged in")
             else:
                 return HttpResponse("no authentication")
+
+def userregister(request):
+    if request.method=="GET":
+        regform=RegistrationForm()
+        return render(request,"account/register.html",{"form":regform})
+    elif request.method=="POST":
+        regform=RegistrationForm(request.POST)
+        if regform.is_valid():
+            new_user=regform.save(commit=False)
+            new_user.set_password(regform.cleaned_data['password'])
+            new_user.save()
+            return HttpResponse("success")
+        else:
+
+            return HttpResponse(regform._errors)
