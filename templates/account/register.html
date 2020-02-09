@@ -9,6 +9,7 @@
     <form class="form-horizontal" action="{% url 'account:register' %}" method="post">
         {%  csrf_token %}
         {{ form.as_p }}
+        {{ profile.as_p }}
         <input class="btn btn-primary" type="submit" value="Login">
     </form>
 </div>

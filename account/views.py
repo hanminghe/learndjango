@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .form import LoginForm, RegistrationForm
+from .form import LoginForm, RegistrationForm, UserProfileForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login
 # Create your views here.
@@ -21,7 +21,8 @@ def userlogin(request):
 def userregister(request):
     if request.method=="GET":
         regform=RegistrationForm()
-        return render(request,"account/register.html",{"form":regform})
+        profileform=UserProfileForm()
+        return render(request,"account/register.html",{"form":regform,"profile":profileform})
     elif request.method=="POST":
         regform=RegistrationForm(request.POST)
         if regform.is_valid():
