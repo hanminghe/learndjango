@@ -25,10 +25,14 @@ def userregister(request):
         return render(request,"account/register.html",{"form":regform,"profile":profileform})
     elif request.method=="POST":
         regform=RegistrationForm(request.POST)
+        profileform=UserProfileForm(request.POST)
         if regform.is_valid():
             new_user=regform.save(commit=False)
             new_user.set_password(regform.cleaned_data['password'])
             new_user.save()
+            new_profile=profileform.save(commit=False)
+            new_profile.user=new_user
+            new_profile.save()
             return HttpResponse("success")
         else:
 
