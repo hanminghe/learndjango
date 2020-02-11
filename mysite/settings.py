@@ -128,3 +128,5 @@ STATICFILES_FINDERS=(
 )
 
 LOGIN_REDIRECT_URL = '/blog/'
+
+LOGIN_URL = '/account/login'
