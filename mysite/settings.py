@@ -134,9 +134,9 @@ LOGIN_URL = '/account/login'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #Instead of sending out real emails the console backend just writes the emails that would be sent to the standard output
-EMAIL_HOST="smtp.exmail.qq.com"
-EMAIL_HOST_USER=
-EMAIL_HOST_PASSWORD=
-EMAIL_PORT=465
-EMAIL_USE_SSL=True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# EMAIL_HOST="smtp.exmail.qq.com"
+# EMAIL_HOST_USER=
+# EMAIL_HOST_PASSWORD=
+# EMAIL_PORT=465
+# EMAIL_USE_SSL=True
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
