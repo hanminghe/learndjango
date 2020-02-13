@@ -12,8 +12,10 @@
     </ul>
     <ul calss="nav nav-bar navbar-right">
         {% if user.is_authenticated %}
+        <li><a href="{% url 'account:my-information' %}">my information</a></li>
         <li>{{ user.username }}<a href="{% url 'account:logout' %}">Logout</a></li>
         {% else %}
+
         <li><a href="{% url 'account:login' %}">Login</a></li>
         {% endif %}
     </ul>

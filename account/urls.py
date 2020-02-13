@@ -30,5 +30,6 @@ urlpatterns = [
         template_name="account/password_reset_complete.html"),
         name='password-reset-complete'),
     path('my-information',views.myself,name="my-information"),
-    
+    path('my-information-edit',views.myself_edit,name="my-information-edit"),
+
 ]
