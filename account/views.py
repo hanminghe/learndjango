@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from .form import LoginForm, RegistrationForm, UserProfileForm, UserForm, UserInfoForm
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile,UserInfo
 from django.contrib.auth.models import User
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 # Create your views here.
 def userlogin(request):
     if request.method=="GET":
@@ -101,3 +103,21 @@ def myself_edit(request):
                     {"user_form":user_form,
                     "userinfo_form":userinfo_form,
                     "userprofile_form":userprofile_form})
+
+@login_required()
+@xframe_options_exempt
+def my_image(request):
+    if request.method =="GET":
+        print(request.method)
+        return render(request,'account/imagecrop.html')
+    else:
+        img=request.POST['img']
+        print(img)
+        userinfo=UserInfo.objects.filter(user=request.user.id).first()
+        print(userinfo)
+        if userinfo != None:
+            userinfo.photo=img
+            userinfo.save()
+            return JsonResponse({'msg': 1})
+        else:
+            return JsonResponse({'msg': 0})

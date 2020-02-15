@@ -1,6 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} my information {% endblock %}
 {% block content %}
+<script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.3/jquery.js"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+
 <div class="row text-center vertical-middle-sm">
     <h1>My information</h1>
 </div>
@@ -47,7 +51,42 @@
 </a>
 
     </div>
-    <div class="col-md-3"><p>picture</p></div>
+    <div class="col-md-3">
+        {% if userinfo.photo %}
+            <img src="{{ userinfo.photo|striptags }}" class="img-circle" id="my_photo" name="user_face"/>
+        {% else %}
+        <img src="{% static 'images/logo.jpg' %}"  class="img-circle" id="my_photo" name="user_face"/>
+        {% endif %}
+        <button class="btn btn-primary btn-lg" id="ipload_image" onclick="upload_image_layer()">
+            upload my photo
+        </button>
+    </div>
 </div>
+<script>
+    function upload_image_layer(){
+        layer.open({
+            title:"upload image",
+            aera:['650px','600px'],
+            type:2,
+            content:"my-image",
+        //    area: screen() < 2 ? ['90%', '80%'] : ['1280px', '720px'],
+        area: screen() < 2 ? ['90%', '80%'] : ['80%', '80%'],
+        })
+    }
+    function screen() {
+        //获取当前窗口的宽度
+	    var width = $(window).width();
+	    if (width > 1200) {
+	        return 3;   //大屏幕
+	    } else if (width > 992) {
+	        return 2;   //中屏幕
+	    } else if (width > 768) {
+	        return 1;   //小屏幕
+	    } else {
+	        return 0;   //超小屏幕
+	    }
+    }
+
+</script>
 
 {% endblock %}
