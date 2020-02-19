@@ -5,4 +5,4 @@ class ArticleColumnForm(forms.ModelForm):
 
     class Meta:
         model=ArticleColumn
-        fields = ("column")
+        fields = ("column",)

@@ -12,7 +12,7 @@
         </tr>
         {% for column in columns %}
         <tr>
-            <td>{{ forloop.count }}</td>
+            <td>{{ forloop.counter }}</td>
             <td>{{ column.column }}</td>
             <td>--</td>
         </tr>
@@ -24,6 +24,7 @@
 
 <script type="text/javascript" src="{% static 'js/jquery2.0.3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/csrf.js' %}"></script> -->
 <script type="text/javascript">
     function add_column(){
         var index=layer.open({
@@ -31,11 +32,26 @@
             skin:"layui-layer-rim",
             area:["400px","200px"],
             title:"add new column",
-            content: '<div class="text-center" style="nargin-top:20px">                <p>please input new column name</p>               <p><input id="id_column" type="text" name="" value=""></p>            </div>',
+            content: '<div class="text-center" style="nargin-top:20px">\
+                <p>please input new column name</p>      \
+                <p>{{column_form.column}}</p>    \
+                </div>',
             btn:['ok','cancel'],
             yes:function(index,layero){
                 column_name=$('#id_column').val();
-                alert(column_name);
+                // alert(column_name);
+                $.ajax({
+                    url:'{% url "article:article-column" %}',
+                    type: 'POST',
+                    data:{"column":column_name},
+                    success:function(e){
+                        if (e.msg==1){
+                            parent.location.reload();
+                        }
+                        layer.msg(e.notice);
+
+                    },
+                });
             },
             btn2:function(index,layero){
                 layer.close(index);
