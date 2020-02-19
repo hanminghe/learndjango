@@ -5,4 +5,4 @@ from .models import ArticleColumn
 @login_required()
 def article_column(request):
     columns=ArticleColumn.objects.filter(user=request.user)
-    return render(request,"article/column/article_column.html",{"columns":columns})
+    return render(request,"article/article_column.html",{"columns":columns})

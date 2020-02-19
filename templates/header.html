@@ -6,17 +6,19 @@
                 <img style="width:100px" src="{% static 'images/logo.jpg' %}" alt="">
             </a>
         </div>
-    </nav>
-    <ul class="nav navbar-nav" role="navigation">
-        <li ><a href="{% url 'blog:blog_title' %}">Blog</a></li>
-    </ul>
-    <ul calss="nav nav-bar navbar-right">
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'account:my-information' %}">my information</a></li>
-        <li>{{ user.username }}<a href="{% url 'account:logout' %}">Logout</a></li>
-        {% else %}
 
-        <li><a href="{% url 'account:login' %}">Login</a></li>
-        {% endif %}
-    </ul>
+        <ul class="nav navbar-nav" role="navigation">
+            <li ><a href="{% url 'blog:blog_title' %}">Blog</a></li>
+        </ul>
+        <ul calss="nav nav-bar navbar-right">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'account:my-information' %}">my information</a></li>
+            <li><a href="{% url 'article:article-column' %}" >文章管理</a></li>
+            <li>{{ user.username }}<a href="{% url 'account:logout' %}">Logout</a></li>
+            {% else %}
+
+            <li><a href="{% url 'account:login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>

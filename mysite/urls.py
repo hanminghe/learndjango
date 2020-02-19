@@ -21,5 +21,5 @@ urlpatterns = [
      path('polls/', include('polls.urls')   ),
      path('blog/', include(('blog.urls','blog'),namespace='blog')   ),
      path('account/',include(('account.urls','login'),namespace="account") ),
-     path('article/',include('article.urls',namespace='article')),
+     path('article/',include('articles.urls',namespace='article')),
 ]
