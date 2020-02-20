@@ -14,8 +14,8 @@
         <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ column.column }}</td>
-            <td><a name="edit" href="javascript:" onlick="edit_column(this,{{column.id}})"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a name="delete" href="javascript:" onlick="del_column(this,{{column.id}})"><span class="glyphicon glyphicon-trash"></span></a></td>
+            <td><a name="edit" href="javascript:" onclick="edit_column(this,{{column.id}})"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a name="delete" href="javascript:" onclick="del_column(this,{{column.id}})"><span class="glyphicon glyphicon-trash"></span></a></td>
         </tr>
         {% empty %}
         <p>no article column yet</p>
@@ -28,6 +28,7 @@
 <script src="{% static 'js/bootstrap.min.js'%}"></script>
 <!--<script type="text/javascript" src="{% static 'js/csrf.js' %}"></script> -->
 <script type="text/javascript">
+
     function add_column(){
         var index=layer.open({
             type:1,
@@ -54,11 +55,67 @@
 
                     },
                 });
-            },
-            btn2:function(index,layero){
-                layer.close(index);
             }
 
+        });
+    }
+    function edit_column(that,id){
+        var name=$(that).parent().parent("tr").children("td").eq(1).text();
+        var index=layer.open({
+            type:1,
+            skin:"layui-layer-rim",
+            area:["400px","200px"],
+            title:"edit column",
+            content: '<div class="text-center" style="nargin-top:20px">\
+                <p>edit column name</p>      \
+                <p><input type="text" id="new_column" value="'+name+'"></p>    \
+                </div>',
+            btn:['ok','cancel'],
+            yes:function(index,layero){
+                column_name=$('#new_column').val();
+                // alert(column_name);
+                $.ajax({
+                    url:'{% url "article:edit-article-column" %}',
+                    type: 'POST',
+                    data:{"id":id,"column":column_name},
+                    success:function(e){
+                        if (e.msg==1){
+                            parent.location.reload();
+                        }
+                        layer.msg(e.notice);
+
+                    },
+                });
+            }
+        });
+    }
+    function del_column(that,id){
+        var name=$(that).parent().parent("tr").children("td").eq(1).text();
+        var index=layer.open({
+            type:1,
+            skin:"layui-layer-rim",
+            area:["400px","200px"],
+            title:"delete column",
+            content: '<div class="text-center" style="nargin-top:20px">\
+                <p>press ok to delete the column</p>      \
+                <p>'+name+'</p>    \
+                </div>',
+            btn:['ok','cancel'],
+            yes:function(index,layero){
+                // alert(column_name);
+                $.ajax({
+                    url:'{% url "article:del-article-column" %}',
+                    type: 'POST',
+                    data:{"id":id},
+                    success:function(e){
+                        if (e.msg==1){
+                            parent.location.reload();
+                        }
+                        layer.msg(e.notice);
+
+                    },
+                });
+            }
         });
     }
 </script>

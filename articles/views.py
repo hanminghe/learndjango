@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import ArticleColumn
 
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.http import HttpResponse,JsonResponse
 from .form import ArticleColumnForm
 
@@ -22,3 +23,32 @@ def article_column(request):
         else:
             ArticleColumn.objects.create(user=request.user,column=column_name)
             return JsonResponse({'msg': 1,'notice':'saved ok'})
+
+@login_required()
+@require_POST
+@csrf_exempt
+def edit_article_column(request):
+        column_name=request.POST['column']
+        id=request.POST['id']
+        columns=ArticleColumn.objects.filter(user_id=request.user.id,id=id).get()
+        if columns:
+            columns.column=column_name
+            columns.save()
+
+            return JsonResponse({'msg': 1,'notice':'new column name saved'})
+
+        else:
+
+            return JsonResponse({'msg': 0,'notice':'nothing to edit'})
+
+@login_required()
+@require_POST
+@csrf_exempt
+def del_article_column(request):
+        id=request.POST['id']
+        columns=ArticleColumn.objects.filter(user_id=request.user.id,id=id).get()
+        if columns:
+            columns.delete()
+            return JsonResponse({'msg': 1,'notice':'the column has been deleted'})
+        else:
+            return JsonResponse({'msg': 0,'notice':'nothing to delete'})
