@@ -15,12 +15,12 @@ class ArticleColumn(models.Model):
         return self.column
 
 class ArticlePost(models.Model):
-    author=models.ForeignKey(User,one_delete=models.CASCADE,related_name='PostBy')
+    author=models.ForeignKey(User,on_delete=models.CASCADE,related_name='PostBy')
     title = models.CharField(blank=True, max_length=200)
     slug = models.SlugField(max_length=500)
-    column=models.ForeignKey(ArticleColumn,on_delete=models.CASCADE，related_name="article_column")
+    column=models.ForeignKey(ArticleColumn, on_delete=models.CASCADE,related_name="article_column")
     body = models.TextField(blank=True)
-    created = models.DateTimeField(blank=True, default=datetime.datetime.now)
+    created = models.DateTimeField(blank=True, default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -36,4 +36,3 @@ class ArticlePost(models.Model):
 
     def get_absolute_url(self):
         return reverse("article:article_detail",args=[self.id,self.slug])
-        
