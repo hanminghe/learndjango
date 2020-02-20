@@ -14,7 +14,8 @@
         <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ column.column }}</td>
-            <td>--</td>
+            <td><a name="edit" href="javascript:" onlick="edit_column(this,{{column.id}})"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a name="delete" href="javascript:" onlick="del_column(this,{{column.id}})"><span class="glyphicon glyphicon-trash"></span></a></td>
         </tr>
         {% empty %}
         <p>no article column yet</p>
@@ -24,6 +25,7 @@
 
 <script type="text/javascript" src="{% static 'js/jquery2.0.3.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js'%}"></script>
 <!--<script type="text/javascript" src="{% static 'js/csrf.js' %}"></script> -->
 <script type="text/javascript">
     function add_column(){
