@@ -52,3 +52,27 @@ def del_article_column(request):
             return JsonResponse({'msg': 1,'notice':'the column has been deleted'})
         else:
             return JsonResponse({'msg': 0,'notice':'nothing to delete'})
+
+@login_required()
+@csrf_exempt
+def article_post(request):
+    if request.method  == "GET":
+        article_post=request.user.article_column.all()
+        post_form=ArticlePostForm()
+        return render(request,"article/article_post.html",{"post_form":post_form,"article_post":article_post})
+    if request.method =="POST":
+        post_form=ArticlePostForm(data=request.POST)
+        if post_form.is_valid():
+            cd=post_form.cleaned_data
+            try:
+                new_post=post_form.save(commit=False)
+                new_post.author=request.user
+                new_post.column=request.user.article_column.get(id=request.POST['column_id'])
+                new_post.save()
+                return JsonResponse({'msg': 1,'notice':'new post was saved'})
+            except:
+                return JsonResponse({'msg': 0,'notice':'during save there was an error'})
+
+        else:
+
+            return JsonResponse({'msg': 2,'notice':'post data was unclean'})
