@@ -55,11 +55,20 @@ def del_article_column(request):
 
 @login_required()
 @csrf_exempt
-def article_post(request):
+def article_post(request,article_id=None):
     if request.method  == "GET":
+
         article_columns=request.user.article_column.all()
-        post_form=ArticlePostForm()
-        return render(request,"article/article_post.html",{"post_form":post_form,"article_columns":article_columns})
+        if article_id ==None:
+            post_form=ArticlePostForm()
+            return render(request,"article/article_post.html",{"post_form":post_form,"article_columns":article_columns})
+        else:
+            article=ArticlePost.objects.get(id=article_id)
+            post_form=ArticlePostForm(initial={"title":article.title})
+            return render(request,"article/article_post.html",\
+                    {"post_form":post_form,"article_columns":article_columns,\
+                    "the_column":article.column,"article":article})
+
     if request.method =="POST":
         post_form=ArticlePostForm(data=request.POST)
         print(request.POST)
@@ -68,11 +77,21 @@ def article_post(request):
             print(cd)
             import traceback
             try:
-                new_post=post_form.save(commit=False)
-                new_post.author=request.user
-                new_post.column=request.user.article_column.get(id=request.POST['id'])
-                new_post.save()
-                return JsonResponse({'msg': 1,'notice':'new post was saved'})
+                if request.POST['article_id'] =='0':
+
+                    new_post=post_form.save(commit=False)
+                    new_post.author=request.user
+                    new_post.column=request.user.article_column.get(id=request.POST['column_id'])
+                    new_post.save()
+                    return JsonResponse({'msg': 1,'notice':'new post was saved'})
+                else:
+                    article=ArticlePost.objects.get(id=request.POST['article_id'])
+                    print(article)
+                    article.title=request.POST['title']
+                    article.body=request.POST['body']
+                    article.column=request.user.article_column.get(id=request.POST['column_id'])
+                    article.save()
+                    return JsonResponse({'msg': 1,'notice':'post was updated'})
             except:
                 traceback.print_exc()
                 return JsonResponse({'msg': 0,'notice':'during save there was an error'})

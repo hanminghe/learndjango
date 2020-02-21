@@ -17,7 +17,11 @@
             <div class="col-md-10 text-left">
                 <select name="" id="which_column">
                     {% for column in article_columns  %}
+                       {% if column == the_column %}
+                       <option value="{{column.id}}" selected>{{column.column}}</option>
+                        {% else %}
                         <option value="{{column.id}}">{{column.column}}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>
@@ -27,7 +31,8 @@
             <div class="col-md-10 text-left">
 
                 <div id="editormd" class="col-md-10 text-left">
-                <textarea style="display:none;" id="id_body"></textarea>
+                <textarea style="display:none;" id="id_body">{% if article %}{{article.body}}{% endif %}</textarea>
+
             </div>
             </div>
         </div>
@@ -49,7 +54,7 @@
         $.ajax({
             url:"{% url 'article:article-post' %}",
             type:"POST",
-            data:{"title":title,"body":body,"id":column_id},
+            data:{"title":title,"body":body,"column_id":column_id,"article_id":{% if article %}{{article.id}}{% else %}0{% endif %} },
             success:function(e){
                 layer.msg(e.notice);
             },

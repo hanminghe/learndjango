@@ -22,7 +22,7 @@ post list
                 <td><a href="{{ article.get_absolute_url }}">{{article.title}}</a></td>
                 <td>{{article.column}}</td>
                 <td>
-                    <a name="edit" href="javascript:" onclick="edit_post(this,{{article.id}})"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a name="edit" href="{%url 'article:article-post' article.id %}" ><span class="glyphicon glyphicon-pencil"></span></a>
                     <a name="delete" href="javascript:" onclick="del_post(this,{{article.id}})"><span class="glyphicon glyphicon-trash"></span></a>
                 </td>
 
@@ -35,10 +35,8 @@ post list
     <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js'%}"></script>
     <!--<script type="text/javascript" src="{% static 'js/csrf.js' %}"></script> -->
-    <script type="text/javascript">
-    function edit_post(that,id){
+<script type="text/javascript">
 
-    }
         function del_post(that,id){
             var name=$(that).parent().parent("tr").children("td").eq(1).text();
             var index=layer.open({
@@ -68,5 +66,5 @@ post list
                 }
             });
         }
-    </script>
+</script>
 {% endblock %}
