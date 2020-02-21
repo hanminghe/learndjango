@@ -5,7 +5,7 @@ from .models import ArticleColumn
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse,JsonResponse
-from .form import ArticleColumnForm
+from .form import ArticleColumnForm,ArticlePostForm
 
 @login_required()
 @csrf_exempt
@@ -57,20 +57,24 @@ def del_article_column(request):
 @csrf_exempt
 def article_post(request):
     if request.method  == "GET":
-        article_post=request.user.article_column.all()
+        article_columns=request.user.article_column.all()
         post_form=ArticlePostForm()
-        return render(request,"article/article_post.html",{"post_form":post_form,"article_post":article_post})
+        return render(request,"article/article_post.html",{"post_form":post_form,"article_columns":article_columns})
     if request.method =="POST":
         post_form=ArticlePostForm(data=request.POST)
+        print(request.POST)
         if post_form.is_valid():
             cd=post_form.cleaned_data
+            print(cd)
+            import traceback
             try:
                 new_post=post_form.save(commit=False)
                 new_post.author=request.user
-                new_post.column=request.user.article_column.get(id=request.POST['column_id'])
+                new_post.column=request.user.article_column.get(id=request.POST['id'])
                 new_post.save()
                 return JsonResponse({'msg': 1,'notice':'new post was saved'})
             except:
+                traceback.print_exc()
                 return JsonResponse({'msg': 0,'notice':'during save there was an error'})
 
         else:

@@ -1,0 +1,51 @@
+{% extends "article/base.html" %}
+{% load static %}
+{% block title %}post article {% endblock %}
+{% block content %}
+
+<div style="margin-left:10px">
+    <form action="" class="form-horizontal" method="post">
+        {% csrf_token %}
+        <div class="row" style="margin-top:10px">
+            <div class="col-md-2 text-right"><span>title:</span></div>
+            <div class="col-md-10 text-left">{{ post_form.title }}</div>
+        </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col-md-2 text-right"><span>column:</span></div>
+            <div class="col-md-10 text-left">
+                <select name="" id="which_column">
+                    {% for column in article_columns  %}
+                        <option value="{{column.id}}">{{column.column}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top :10px">
+            <div class="col-md-2 text-right"><span>body:</span></div>
+            <div class="col-md-10 text-left">{{post_form.body}}</div>
+        </div>
+        <div class="row">
+            <input type="text" class="btn btn-primary btn-lg" value="post" onclick="publish_article()">
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="{% static 'js/jquery2.0.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+
+<script type="text/javascript">
+    function publish_article(){
+        var title=$("#id_title").val();
+        var column_id=$("#which_column").val();
+        var body=$("#id_body").val();
+        $.ajax({
+            url:"{% url 'article:article-post' %}",
+            type:"POST",
+            data:{"title":title,"body":body,"id":column_id},
+            success:function(e){
+                layer.msg(e.notice);
+            },
+        })
+    }
+
+</script>
+{% endblock %}
