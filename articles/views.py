@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import ArticleColumn
+from .models import ArticleColumn,ArticlePost
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -80,3 +80,8 @@ def article_post(request):
         else:
 
             return JsonResponse({'msg': 2,'notice':'post data was unclean'})
+
+@login_required
+def article_list(request):
+    articles=ArticlePost.objects.filter(author=request.user)
+    return render(request,"article/article_list.html",{"articles":articles})

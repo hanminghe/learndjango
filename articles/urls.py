@@ -8,4 +8,5 @@ urlpatterns = [
     path('edit-article-column',views.edit_article_column,name='edit-article-column'),
     path('del-article-column',views.del_article_column,name='del-article-column'),
     path('article-post',views.article_post,name='article-post'),
+    path('article-list',views.article_list,name='article-list'),
 ]
