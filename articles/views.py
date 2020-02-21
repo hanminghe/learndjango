@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import ArticleColumn,ArticlePost
 
@@ -85,3 +85,20 @@ def article_post(request):
 def article_list(request):
     articles=ArticlePost.objects.filter(author=request.user)
     return render(request,"article/article_list.html",{"articles":articles})
+
+@login_required
+def article_detail(request,id,slug):
+    article=get_object_or_404(ArticlePost,id=id,slug=slug)
+    return render(request,"article/article_detail.html",{"article":article})
+
+@login_required()
+@require_POST
+@csrf_exempt
+def del_article(request):
+        id=request.POST['id']
+        post=ArticlePost.objects.filter(author=request.user.id,id=id).get()
+        if post:
+            post.delete()
+            return JsonResponse({'msg': 1,'notice':'the post has been deleted'})
+        else:
+            return JsonResponse({'msg': 0,'notice':'nothing to delete'})

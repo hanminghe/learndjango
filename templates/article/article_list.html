@@ -19,7 +19,7 @@ post list
             {% for article in articles %}
             <tr id={{article.id}}>
                 <td>{{forloop.counter}}</td>
-                <td>{{article.title}}</td>
+                <td><a href="{{ article.get_absolute_url }}">{{article.title}}</a></td>
                 <td>{{article.column}}</td>
                 <td>
                     <a name="edit" href="javascript:" onclick="edit_post(this,{{article.id}})"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -30,4 +30,43 @@ post list
             {% endfor %}
         </table>
     </div>
+
+    <script type="text/javascript" src="{% static 'js/jquery2.0.3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <!--<script type="text/javascript" src="{% static 'js/csrf.js' %}"></script> -->
+    <script type="text/javascript">
+    function edit_post(that,id){
+
+    }
+        function del_post(that,id){
+            var name=$(that).parent().parent("tr").children("td").eq(1).text();
+            var index=layer.open({
+                type:1,
+                skin:"layui-layer-rim",
+                area:["400px","200px"],
+                title:"delete column",
+                content: '<div class="text-center" style="nargin-top:20px">\
+                    <p>press ok to delete the post</p>      \
+                    <p>'+name+'</p>    \
+                    </div>',
+                btn:['ok','cancel'],
+                yes:function(index,layero){
+                    // alert(column_name);
+                    $.ajax({
+                        url:'{% url "article:del-article" %}',
+                        type: 'POST',
+                        data:{"id":id},
+                        success:function(e){
+                            if (e.msg==1){
+                                parent.location.reload();
+                            }
+                            layer.msg(e.notice);
+
+                        },
+                    });
+                }
+            });
+        }
+    </script>
 {% endblock %}
