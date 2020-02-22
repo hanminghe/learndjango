@@ -7,6 +7,8 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse,JsonResponse
 from .form import ArticleColumnForm,ArticlePostForm
 
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+
 @login_required()
 @csrf_exempt
 def article_column(request):
@@ -103,7 +105,16 @@ def article_post(request,article_id=None):
 @login_required
 def article_list(request):
     articles=ArticlePost.objects.filter(author=request.user)
-    return render(request,"article/article_list.html",{"articles":articles})
+    paginator=Paginator(articles,2)
+    page=request.GET.get('page')
+    try:
+        current_page=paginator.page(page)
+    except PageNotAnInteger:
+        current_page=paginator.page(1)
+    except EmptyPage:
+        current_page=paginator.page(paginator.num_pages)
+    articles=current_page.object_list
+    return render(request,"article/article_list.html",{"articles":articles,"page":current_page})
 
 @login_required
 def article_detail(request,id,slug):
