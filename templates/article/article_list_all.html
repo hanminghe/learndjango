@@ -1,0 +1,25 @@
+{% extends "article/base.html" %}
+{% load static %}
+{% block title %}
+all post list
+{% endblock %}
+
+{% block content %}
+<div class="row text-center-vertical-middle-sm">
+    <h1>看代码 使大脑清醒</h1>
+</div>
+<div class="container">
+    <div class="col-md-9">
+    {% for article in articles  %}
+        <div class="list-group">
+            <a href="{{ article.get_allview_url }}" class="list-group-item active">
+                <h4 class="list-group-item-heading">{{ article.title }}</h4>
+                <p class="list-group-item-text">author: {{ article.author.username }}</p>
+                <p class="list-group-item-text">brief: {{ article.body|slice:'70'|linebreaks }}</p>
+            </a>
+        </div>
+    {% endfor %}
+    {% include "paginator.html" %}
+    </div>
+</div>
+{% endblock %}

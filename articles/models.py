@@ -37,3 +37,6 @@ class ArticlePost(models.Model):
 
     def get_absolute_url(self):
         return reverse("article:article_detail",args=[self.id,self.slug])
+
+    def get_allview_url(self):
+        return reverse("article:article-detail-all",args=[self.id,self.slug])
