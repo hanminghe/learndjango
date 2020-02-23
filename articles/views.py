@@ -119,6 +119,8 @@ def article_list(request):
 @login_required
 def article_detail(request,id,slug):
     article=get_object_or_404(ArticlePost,id=id,slug=slug)
+    article.users_view=article.users_view+1
+    article.save()
     return render(request,"article/article_detail.html",{"article":article})
 
 @login_required()

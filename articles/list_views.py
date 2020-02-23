@@ -33,7 +33,10 @@ def article_list(request,username=None):
 
 def article_detail(request,id,slug):
     article=get_object_or_404(ArticlePost,id=id,slug=slug)
-    return render(request,"article/article_detail.html",{"article":article})
+    article.users_view=article.users_view+1
+    article.save()
+    top5articles=ArticlePost.objects.filter().order_by('-users_view')[:5]
+    return render(request,"article/article_detail.html",{"article":article,"top5":top5articles})
 
 @csrf_exempt
 @require_POST
