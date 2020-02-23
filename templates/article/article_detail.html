@@ -14,7 +14,9 @@
             <p>{{ user.username }}</p>
             <span stype="margin-left:20px" class="glyphicon glyphicon-thumbs-up">{{total_likes}} like{{total_likes|pluralize }}</span>
             <span stype="margin-left:20px">{{article.users_view}} view{{article.users_view|pluralize }}</span>
-
+<p><span style="margin-right:10px"><strong>Tags:</strong></span>
+    {{ article.article_tag.all | join:", " }}
+</p>
         </header>
 
         <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}" />
