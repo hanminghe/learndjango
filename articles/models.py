@@ -14,6 +14,8 @@ class ArticleColumn(models.Model):
     def __str__(self):
         return self.column
 
+
+
 class ArticlePost(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name='PostBy')
     title = models.CharField(blank=True, max_length=200)
@@ -42,3 +44,18 @@ class ArticlePost(models.Model):
 
     def get_allview_url(self):
         return reverse("article:article-detail-all",args=[self.id,self.slug])
+
+
+
+class Comment(models.Model):
+    """article comment."""
+    article=models.ForeignKey(ArticlePost,on_delete=models.CASCADE,related_name='comment')
+    commentator=models.ForeignKey(User,on_delete=models.CASCADE,related_name='commentator')
+    body=models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering=("-created",)
+
+    def __str__(self):
+        return "comment by {0} on {1}".format(self.commentator.username,self.article)
