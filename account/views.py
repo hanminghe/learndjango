@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import UserProfile,UserInfo
 from django.contrib.auth.models import User
 from django.views.decorators.clickjacking import xframe_options_exempt
-
+from django.urls import reverse
 # Create your views here.
 def userlogin(request):
     if request.method=="GET":
@@ -38,7 +38,8 @@ def userregister(request):
             new_profile=profileform.save(commit=False)
             new_profile.user=new_user
             new_profile.save()
-            return HttpResponse("success")
+            # return HttpResponse("success")
+            return HttpResponseRedirect(reverse("account:login"))
         else:
 
             return HttpResponse(regform._errors)
