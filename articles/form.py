@@ -12,7 +12,7 @@ class ArticlePostForm(forms.ModelForm):
         model=ArticlePost
         fields=("title","body")
 
-class ArticleComment(forms.ModelForm):
+class ArticleCommentForm(forms.ModelForm):
     class Meta:
-        model=ArticleComment
+        model=Comment
         fields=("body",)

@@ -1,11 +1,11 @@
 from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import ArticleColumn,ArticlePost
+from .models import ArticleColumn,ArticlePost,Comment
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse,JsonResponse
-from .form import ArticleColumnForm,ArticlePostForm
+from .form import ArticleColumnForm,ArticlePostForm,ArticleCommentForm
 
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
@@ -121,7 +121,19 @@ def article_detail(request,id,slug):
     article=get_object_or_404(ArticlePost,id=id,slug=slug)
     article.users_view=article.users_view+1
     article.save()
-    return render(request,"article/article_detail.html",{"article":article})
+    if request.method=="POST":
+        comment_form=ArticleCommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment=comment_form.save(commit=False)
+            new_comment.article=article
+            new_comment.commentator=request.user
+            new_comment.save()
+    else:
+
+        comment_form=ArticleCommentForm()
+    comments=Comment.objects.filter(article=article)
+    top5articles=ArticlePost.objects.filter().order_by('-users_view')[:5]
+    return render(request,"article/article_detail.html",{"article":article,"top5":top5articles,"comment_form":comment_form,"comments":comments})
 
 @login_required()
 @require_POST
