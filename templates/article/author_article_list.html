@@ -1,5 +1,6 @@
 {% extends "article/base.html" %}
 {% load static %}
+{% load article_tags %}
 {% block title %}
 all post list
 {% endblock %}
@@ -18,6 +19,7 @@ all post list
                 <p class="list-group-item-text">
                     author: <a href="{% url 'article:author-articles' article.author.username %}">{{ article.author.username }}</a>
                 </p>
+
                 <p class="list-group-item-text">brief: {{ article.body|slice:'70'|linebreaks }}</p>
 
         </div>
@@ -31,6 +33,7 @@ all post list
         <img src="{% static 'images/logo.jpg' %}"  class="img-circle" id="my_photo" name="user_face" style="width:150px"/>
         {% endif %}
         <div> <p>{{user.username}}</p></div>
+        <p>posted {% author_total_articles user %}</p>
         {% if userinfo %}
         <div> <p>{{userinfo.company}}</p></div>
         <div> <p>{{userinfo.aboutme}}</p></div>

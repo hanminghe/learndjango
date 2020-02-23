@@ -1,12 +1,14 @@
 {% extends "article/base.html" %}
 {% load static %}
+{% load article_tags %}
 {% block title %}
 all post list
 {% endblock %}
 
 {% block content %}
-<div class="row text-center-vertical-middle-sm">
+<div class="row text-center vertical-middle-sm">
     <h1>看代码 使大脑清醒</h1>
+    <p>there are {% total_articles %} posts</p>
 </div>
 <div class="container">
     <div class="col-md-9">
@@ -16,8 +18,9 @@ all post list
                 <h4 class="list-group-item-heading">{{ article.title }}</h4>
             </a>
                 <p class="list-group-item-text">
-                    author: <a href="{% url 'article:author-articles' article.author.username %}">{{ article.author.username }}</a>     
+                    author: <a href="{% url 'article:author-articles' article.author.username %}">{{ article.author.username }}</a>
                 </p>
+
                 <p class="list-group-item-text">brief: {{ article.body|slice:'70'|linebreaks }}</p>
 
         </div>

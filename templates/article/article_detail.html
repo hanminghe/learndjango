@@ -1,7 +1,7 @@
 {% extends "article/base.html" %}
 
 {% load static %}
-
+{% load article_tags %}
 {% block title %}articles list{% endblock %}
 
 {% block content %}
@@ -78,7 +78,12 @@
                 </li>
             {% endfor %}
         </ol>
+        <hr>
+        <p class="text-center"><h3>latest articles</h3></p>
+        {% latest_articles 4 %}
     </div>
+
+
 </div>
 <script src='{% static "js/jquery.js" %}'></script>
 <script src='{% static "editor/lib/marked.min.js" %}'></script>
