@@ -9,6 +9,7 @@ from .form import ArticleColumnForm,ArticlePostForm,ArticleCommentForm,ArticleTa
 
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 import json
+from django.db.models import Count
 
 @login_required()
 @csrf_exempt
@@ -144,11 +145,19 @@ def article_detail(request,id,slug):
             new_comment.commentator=request.user
             new_comment.save()
     else:
-        print(article.comment.count())
+        # print(article.comment.count())
         comment_form=ArticleCommentForm()
     comments=Comment.objects.filter(article=article)
     top5articles=ArticlePost.objects.filter().order_by('-users_view')[:5]
-    return render(request,"article/article_detail.html",{"article":article,"top5":top5articles,"comment_form":comment_form,"comments":comments})
+
+    article_tag_ids=article.article_tag.values_list("id",flat=True)
+    similar_articles=ArticlePost.objects.filter(article_tag__in=article_tag_ids).exclude(id=article.id)
+    similar_articles=similar_articles.annotate(same_tags=Count("article_tag")).order_by('-same_tags','-created')[:4]
+
+    return render(request,"article/article_detail.html",\
+    {"article":article,"top5":top5articles,\
+    "comment_form":comment_form,"comments":comments,\
+    "similar_articles":similar_articles})
 
 @login_required()
 @require_POST

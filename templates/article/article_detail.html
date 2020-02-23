@@ -92,6 +92,15 @@
                 <li><a href="{{ comment_article.get_absolute_url }}">{{ comment_article.title }}</a></li>
             {% endfor %}
         </ul>
+        <hr>
+        <p class="text-center">
+            <h3>recommend</h3>
+        </p>
+        {% for similar in similar_articles %}
+            <p><a href="{{ similar.get_absolute_url }}">{{ similar.title }}</a></p>
+        {% empty %}
+        <p>no recommend yet</p>
+        {% endfor %}
     </div>
 
 
