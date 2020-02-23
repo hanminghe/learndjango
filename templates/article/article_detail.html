@@ -74,13 +74,22 @@
         <ol>
             {% for rank in top5 %}
                 <li>
-                    <a href="{{ rank.get_allview_url }}">{{ rank.title }}</a>
+                    <a href="{{ rank.get_absolute_url }}">{{ rank.title }}</a>
                 </li>
             {% endfor %}
         </ol>
         <hr>
         <p class="text-center"><h3>latest articles</h3></p>
         {% latest_articles 4 %}
+
+        <hr>
+        <p class="text-center"><h3>most commented</h3></p>
+        {% most_commented_articles as most_comments %}
+        <ul>
+            {% for comment_article in most_comments %}
+                <li><a href="{{ comment_article.get_absolute_url }}">{{ comment_article.title }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
 
 
