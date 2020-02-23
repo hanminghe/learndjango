@@ -1,0 +1,122 @@
+{% extends "article/base.html" %}
+{% load static %}
+{% block title %}article tag {% endblock %}
+{% block content %}
+<div>
+    <p class="text-right"><button id="addtag" onclick="add_tag()" class="btn btn-primary">add tag</button></p>
+    <table class="table table-hover">
+        <tr>
+            <td>line</td>
+            <td>栏目</td>
+            <td>操作</td>
+        </tr>
+        {% for tag in tags %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ tag.tag }}</td>
+            <td><a name="edit" href="javascript:" onclick="edit_tag(this,{{tag.id}})"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a name="delete" href="javascript:" onclick="del_tag(this,{{tag.id}})"><span class="glyphicon glyphicon-trash"></span></a></td>
+        </tr>
+        {% empty %}
+        <p>no article tag yet</p>
+        {% endfor %}
+    </table>
+</div>
+
+<script type="text/javascript" src="{% static 'js/jquery2.0.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js'%}"></script>
+<!--<script type="text/javascript" src="{% static 'js/csrf.js' %}"></script> -->
+<script type="text/javascript">
+
+    function add_tag(){
+        var index=layer.open({
+            type:1,
+            skin:"layui-layer-rim",
+            area:["400px","200px"],
+            title:"add new tag",
+            content: '<div class="text-center" style="nargin-top:20px">\
+                <p>please input new tag name</p>      \
+                <p>{{tag_form.tag}}</p>    \
+                </div>',
+            btn:['ok','cancel'],
+            yes:function(index,layero){
+                tag_name=$('#id_tag').val();
+                // alert(tag_name);
+                $.ajax({
+                    url:'{% url "article:article-tag" %}',
+                    type: 'POST',
+                    data:{"tag":tag_name},
+                    success:function(e){
+                        if (e.msg==1){
+                            parent.location.reload();
+                        }
+                        layer.msg(e.notice);
+
+                    },
+                });
+            }
+
+        });
+    }
+    function edit_tag(that,id){
+        var name=$(that).parent().parent("tr").children("td").eq(1).text();
+        var index=layer.open({
+            type:1,
+            skin:"layui-layer-rim",
+            area:["400px","200px"],
+            title:"edit tag",
+            content: '<div class="text-center" style="nargin-top:20px">\
+                <p>edit tag name</p>      \
+                <p><input type="text" id="new_tag" value="'+name+'"></p>    \
+                </div>',
+            btn:['ok','cancel'],
+            yes:function(index,layero){
+                tag_name=$('#new_tag').val();
+                // alert(tag_name);
+                $.ajax({
+                    url:'{% url "article:edit-article-tag" %}',
+                    type: 'POST',
+                    data:{"id":id,"tag":tag_name},
+                    success:function(e){
+                        if (e.msg==1){
+                            parent.location.reload();
+                        }
+                        layer.msg(e.notice);
+
+                    },
+                });
+            }
+        });
+    }
+    function del_tag(that,id){
+        var name=$(that).parent().parent("tr").children("td").eq(1).text();
+        var index=layer.open({
+            type:1,
+            skin:"layui-layer-rim",
+            area:["400px","200px"],
+            title:"delete tag",
+            content: '<div class="text-center" style="nargin-top:20px">\
+                <p>press ok to delete the tag</p>      \
+                <p>'+name+'</p>    \
+                </div>',
+            btn:['ok','cancel'],
+            yes:function(index,layero){
+                // alert(tag_name);
+                $.ajax({
+                    url:'{% url "article:del-article-tag" %}',
+                    type: 'POST',
+                    data:{"id":id},
+                    success:function(e){
+                        if (e.msg==1){
+                            parent.location.reload();
+                        }
+                        layer.msg(e.notice);
+
+                    },
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

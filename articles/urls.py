@@ -16,4 +16,7 @@ urlpatterns = [
     path('article-detail-all/<int:id>/<slug:slug>',list_views.article_detail,name='article-detail-all'),
     path('article-list-all/<username>',list_views.article_list,name='author-articles'),
     path('like-articles',list_views.like_article,name="like-article"),
+    path('article-tag',views.article_tag,name='article-tag'),
+    path('edit-article-tag',views.edit_article_tag,name='edit-article-tag'),
+    path('del-article-tag',views.del_article_tag,name='del-article-tag'),
 ]

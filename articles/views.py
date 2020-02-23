@@ -1,11 +1,11 @@
 from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import ArticleColumn,ArticlePost,Comment
+from .models import ArticleColumn,ArticlePost,Comment,ArticleTag
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse,JsonResponse
-from .form import ArticleColumnForm,ArticlePostForm,ArticleCommentForm
+from .form import ArticleColumnForm,ArticlePostForm,ArticleCommentForm,ArticleTagForm
 
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
@@ -144,5 +144,52 @@ def del_article(request):
         if post:
             post.delete()
             return JsonResponse({'msg': 1,'notice':'the post has been deleted'})
+        else:
+            return JsonResponse({'msg': 0,'notice':'nothing to delete'})
+
+@login_required()
+@csrf_exempt
+def article_tag(request):
+    if request.method  == "GET":
+        tag=ArticleTag.objects.filter(author=request.user)
+        tag_form=ArticleTagForm()
+        return render(request,"article/article_tag.html",{"tags":tag,"tag_form":tag_form})
+    if request.method =="POST":
+        tag_name=request.POST['tag']
+        tags=ArticleTag.objects.filter(author_id=request.user.id,tag=tag_name)
+        if tags:
+            return JsonResponse({'msg': 0,'notice':'the tag provided was existing before'})
+
+        else:
+            ArticleTag.objects.create(author=request.user,tag=tag_name)
+            return JsonResponse({'msg': 1,'notice':'saved ok'})
+
+
+@login_required()
+@require_POST
+@csrf_exempt
+def edit_article_tag(request):
+        tag_name=request.POST['tag']
+        id=request.POST['id']
+        tags=ArticleTag.objects.filter(author_id=request.user.id,id=id).get()
+        if tags:
+            tags.tag=tag_name
+            tags.save()
+
+            return JsonResponse({'msg': 1,'notice':'new tag name saved'})
+
+        else:
+
+            return JsonResponse({'msg': 0,'notice':'nothing to edit'})
+
+@login_required()
+@require_POST
+@csrf_exempt
+def del_article_tag(request):
+        id=request.POST['id']
+        tags=ArticleTag.objects.filter(author_id=request.user.id,id=id).get()
+        if tags:
+            tags.delete()
+            return JsonResponse({'msg': 1,'notice':'the tag has been deleted'})
         else:
             return JsonResponse({'msg': 0,'notice':'nothing to delete'})
