@@ -14,9 +14,12 @@ all post list
         <div class="list-group">
             <a href="{{ article.get_allview_url }}" class="list-group-item active">
                 <h4 class="list-group-item-heading">{{ article.title }}</h4>
-                <p class="list-group-item-text">author: {{ article.author.username }}</p>
-                <p class="list-group-item-text">brief: {{ article.body|slice:'70'|linebreaks }}</p>
             </a>
+                <p class="list-group-item-text">
+                    author: <a href="{% url 'article:author-articles' article.author.username %}">{{ article.author.username }}</a>     
+                </p>
+                <p class="list-group-item-text">brief: {{ article.body|slice:'70'|linebreaks }}</p>
+
         </div>
     {% endfor %}
     {% include "paginator.html" %}

@@ -1,10 +1,14 @@
 from django.shortcuts import render,get_object_or_404
 from .models import ArticlePost
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from django.contrib.auth.models import User
 
-
-def article_list(request):
-    articles=ArticlePost.objects.all()
+def article_list(request,username=None):
+    if username:
+        user=User.objects.get(username=username)
+        articles=ArticlePost.objects.filter(author=user)
+    else:
+        articles=ArticlePost.objects.all()
     paginator=Paginator(articles,3)
     page=request.GET.get('page')
     try:

@@ -14,4 +14,5 @@ urlpatterns = [
     path('del-article',views.del_article,name='del-article'),
     path('article-list-all',list_views.article_list,name='article-list-all'),
     path('article-detail-all/<int:id>/<slug:slug>',list_views.article_detail,name='article-detail-all'),
+    path('article-list-all/<username>',list_views.article_list,name='author-articles'),
 ]
