@@ -422,7 +422,7 @@ server {
     location /static/ {
         root /home/djangoadmin/pyapps/btre_project;
     }
-    
+
     location /media/ {
         root /home/djangoadmin/pyapps/btre_project;    
     }
@@ -515,3 +515,7 @@ server {
 # sudo systemctl restart nginx
 # sudo systemctl restart gunicorn
 ```
+
+d:\sqlite3.exe db.sqlite3
+.tables
+pragma table_info(table的名字)
