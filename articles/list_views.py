@@ -7,6 +7,10 @@ def article_list(request,username=None):
     if username:
         user=User.objects.get(username=username)
         articles=ArticlePost.objects.filter(author=user)
+        try:
+            userinfo=user.userinfo
+        except:
+            userinfo=None
     else:
         articles=ArticlePost.objects.all()
     paginator=Paginator(articles,3)
@@ -18,7 +22,10 @@ def article_list(request,username=None):
     except EmptyPage:
         current_page=paginator.page(paginator.num_pages)
     articles=current_page.object_list
-    return render(request,"article/article_list_all.html",{"articles":articles,"page":current_page})
+    if username:
+        return render(request,"article/author_article_list.html",{"articles":articles,"page":current_page,"user":user,"userinfo":userinfo})    
+    else:
+        return render(request,"article/article_list_all.html",{"articles":articles,"page":current_page})
 
 def article_detail(request,id,slug):
     article=get_object_or_404(ArticlePost,id=id,slug=slug)
