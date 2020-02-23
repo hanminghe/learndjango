@@ -8,6 +8,7 @@ from django.http import HttpResponse,JsonResponse
 from .form import ArticleColumnForm,ArticlePostForm,ArticleCommentForm,ArticleTagForm
 
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+import json
 
 @login_required()
 @csrf_exempt
@@ -61,15 +62,16 @@ def article_post(request,article_id=None):
     if request.method  == "GET":
 
         article_columns=request.user.article_column.all()
+        article_tags=request.user.tag.all()
         if article_id ==None:
             post_form=ArticlePostForm()
-            return render(request,"article/article_post.html",{"post_form":post_form,"article_columns":article_columns})
+            return render(request,"article/article_post.html",{"post_form":post_form,"article_columns":article_columns,"article_tags":article_tags})
         else:
             article=ArticlePost.objects.get(id=article_id)
             post_form=ArticlePostForm(initial={"title":article.title})
             return render(request,"article/article_post.html",\
                     {"post_form":post_form,"article_columns":article_columns,\
-                    "the_column":article.column,"article":article})
+                    "the_column":article.column,"article":article,"article_tags":article_tags,"the_tag":article.article_tag.all})
 
     if request.method =="POST":
         post_form=ArticlePostForm(data=request.POST)
@@ -85,6 +87,11 @@ def article_post(request,article_id=None):
                     new_post.author=request.user
                     new_post.column=request.user.article_column.get(id=request.POST['column_id'])
                     new_post.save()
+                    tags=request.POST['tags']
+                    if tags:
+                        for atag in json.loads(tags):
+                            tag=request.user.tag.get(tag=atag)
+                            new_post.article_tag.add(tag)
                     return JsonResponse({'msg': 1,'notice':'new post was saved'})
                 else:
                     article=ArticlePost.objects.get(id=request.POST['article_id'])
@@ -92,7 +99,15 @@ def article_post(request,article_id=None):
                     article.title=request.POST['title']
                     article.body=request.POST['body']
                     article.column=request.user.article_column.get(id=request.POST['column_id'])
+                    article.article_tag.set([])
                     article.save()
+                    tags=request.POST['tags']
+                    if tags:
+                        print(tags)
+
+                        for atag in json.loads(tags):
+                            tag=request.user.tag.get(tag=atag)
+                            article.article_tag.add(tag)
                     return JsonResponse({'msg': 1,'notice':'post was updated'})
             except:
                 traceback.print_exc()

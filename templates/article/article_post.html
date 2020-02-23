@@ -26,6 +26,23 @@
                 </select>
             </div>
         </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col-md-2 text-right"><span>tag:</span></div>
+            <div class="col-md-10 text-left">
+{% for tag in article_tags %}
+<label for="" class="checkbox-inline">
+
+     {% if tag in the_tag %}
+    <input type="checkbox" class="tagcheckbox" id="{{tag.id}}" name="article_tag" value="{{tag.tag}}" checked>{{tag.tag}}
+    {% else %}
+   <input type="checkbox" class="tagcheckbox" id="{{tag.id}}" name="article_tag" value="{{tag.tag}}">{{tag.tag}}
+    {% endif %}
+</label>
+{% empty %}
+<p>click <a href="{% url 'article:article-tag' %}">here</a> make your tag</p>
+{% endfor %}
+            </div>
+        </div>
         <div class="row" style="margin-top :10px">
             <div class="col-md-2 text-right"><span>body:</span></div>
             <div class="col-md-10 text-left">
@@ -51,10 +68,18 @@
         var title=$("#id_title").val();
         var column_id=$("#which_column").val();
         var body=$("#id_body").val();
+        var article_tags=[];
+        $.each($("input[name='article_tag']:checked"),
+                function(){
+                    article_tags.push($(this).val());
+                });
         $.ajax({
             url:"{% url 'article:article-post' %}",
             type:"POST",
-            data:{"title":title,"body":body,"column_id":column_id,"article_id":{% if article %}{{article.id}}{% else %}0{% endif %} },
+            data:{"title":title,"body":body,"column_id":column_id,
+                    "article_id":{% if article %}{{article.id}}{% else %}0{% endif %},
+                    "tags":JSON.stringify(article_tags)
+                 },
             success:function(e){
                 layer.msg(e.notice);
             },
