@@ -45,7 +45,7 @@
         </div>
         <hr>
         <div>
-            <h3><span class="glyphicon plyphicon-bullhorn">has {{ comments.count }}comments</span></h3>
+            <h3><span class="glyphicon plyphicon-bullhorn">has {{ article.comment.count }} comments</span></h3>
         </div>
         {% for comment in comments %}
             <p><strong>{{ comment.commentator.username }} :</strong></p>

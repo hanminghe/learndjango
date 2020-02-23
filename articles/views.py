@@ -129,7 +129,7 @@ def article_detail(request,id,slug):
             new_comment.commentator=request.user
             new_comment.save()
     else:
-
+        print(article.comment.count())
         comment_form=ArticleCommentForm()
     comments=Comment.objects.filter(article=article)
     top5articles=ArticlePost.objects.filter().order_by('-users_view')[:5]
