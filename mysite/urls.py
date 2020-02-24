@@ -24,4 +24,5 @@ urlpatterns = [
      path('account/',include(('account.urls','login'),namespace="account") ),
      path('article/',include('articles.urls',namespace='article')),
      path('home/',TemplateView.as_view(template_name="home.html"),name="home"),
+     path('image/',include('images.urls',namespace='image')),
 ]
