@@ -10,11 +10,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import ImageForm
 from .models import Image
 
-@login_required(login_url='/account/login/')
+@login_required()
 @csrf_exempt
 @require_POST
 def upload_image(request):
     form = ImageForm(data=request.POST)
+    print(form)
     if form.is_valid():
         try:
             new_item = form.save(commit=False)
