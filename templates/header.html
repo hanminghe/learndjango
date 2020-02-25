@@ -13,6 +13,7 @@
             <li ><a href="{% url 'article:article-list-all' %}">Articles</a></li>
             <li><a href="{% url 'image:list_images' %}">images</a></li>
             <li><a href="{% url 'image:falls_images' %}">fall images</a></li>
+            <li><a href="{% url 'course:about' %}">course</a></li>
         </ul>
         <ul calss="nav nav-bar navbar-right">
             {% if user.is_authenticated %}
