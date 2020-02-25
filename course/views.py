@@ -18,3 +18,18 @@ class CourseListView(ListView):
     def get_queryset(self):
         qs=super(CourseListView,self).get_queryset()
         return qs.filter(id = 1)
+
+class UserMixin:
+    def get_queryset(self):
+        qs=super(UserMixin,self).get_queryset()
+        return qs.filter(user=self.request.user)
+
+from braces.views import LoginRequiredMixin
+
+class UserCourseMixin(UserMixin,LoginRequiredMixin):
+    model=Course
+
+
+class ManageCourseListView(UserCourseMixin,ListView):
+    context_object_name="courses"
+    template_name="course/manage_course_list.html"

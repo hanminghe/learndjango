@@ -14,6 +14,7 @@
             <li><a href="{% url 'image:list_images' %}">images</a></li>
             <li><a href="{% url 'image:falls_images' %}">fall images</a></li>
             <li><a href="{% url 'course:about' %}">course</a></li>
+            <li><a href="{% url 'course:manage-course' %}">manage course</a></li>
         </ul>
         <ul calss="nav nav-bar navbar-right">
             {% if user.is_authenticated %}
