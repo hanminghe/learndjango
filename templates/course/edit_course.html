@@ -1,0 +1,13 @@
+{% extends "article/base.html" %}
+{% block title %}
+edit course
+{% endblock %}
+{% block content %}
+<div style="margin-left:100px;margin-top:10px;">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="edit Course">
+    </form>
+</div>
+{% endblock %}
