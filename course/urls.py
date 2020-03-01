@@ -10,4 +10,6 @@ urlpatterns=[
     path('create-course/',views.CreateCourseView.as_view(),name="create-course"),
     path('delete-course/<int:pk>',views.DeleteCourseView.as_view(),name="delete-course"),
     path('edit-course/<int:pk>',views.UpdateCourseView.as_view(),name="edit-course"),
+    path('create-lesson/',views.CreateLessonView.as_view(),name='create-lesson'),
+    path('lesson-list/',views.LessonListView.as_view(),name="lesson-list"),
 ]

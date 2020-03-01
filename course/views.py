@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,ListView,CreateView,DeleteView,UpdateView
-from .models import Course
+from .models import Course,Lesson
 from django import forms
 import json
 from django.http import HttpResponse
@@ -12,6 +12,16 @@ class CreateCourseForm(forms.ModelForm):
     class Meta:
         model=Course
         fields=("title","overview")
+
+class CreateLessonForm(forms.ModelForm):
+    class Meta:
+        model=Lesson
+        fields=['course','title','video','description','attach']
+
+    def __init__(self,user,*args,**kargs):
+        super(CreateLessonForm,self).__init__(*args,**kargs)
+        self.fields['course'].queryset=Course.objects.filter(user=user)
+
 
 class AboutView(TemplateView):
     template_name="course/about.html"
@@ -74,3 +84,35 @@ class DeleteCourseView(UserCourseMixin, DeleteView):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             return resp
+
+class CreateLessonView(LoginRequiredMixin,CreateView):
+    model= Lesson
+    login_url="/account/login"
+
+    def get(self,request,*args,**kargs):
+        form=CreateLessonForm(user=self.request.user)
+        return render(request,"course/create_lesson.html",{"form":form})
+
+    def post(self,request,*args,**kargs):
+        form=CreateLessonForm(self.request.user,request.POST,request.FILES)
+        if form.is_valid():
+            new_lesson=form.save(commit=False)
+            new_lesson.user=self.request.user
+            new_lesson.save()
+            return redirect("course:manage-course")
+
+
+
+
+class LessonListView(ListView):
+    model=Lesson  # equal to Course.objects.all()
+    # queryset=Course.objects.filter(id = 1)   # one method
+    # user=User.objects.filter(username = "")
+
+    context_object_name="lessons"  # param  name of inside tempalte
+    template_name="course/lesson_list.html"
+
+    def get_queryset(self):
+        qs=super(LessonListView,self).get_queryset()
+        # return qs.filter(id = 1)
+        return qs
