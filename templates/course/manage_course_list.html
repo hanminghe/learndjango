@@ -28,6 +28,8 @@ manage course
                     <span class="glyphicon glyphicon-trash" style="margin-left:10px"></span></a>
                 <a href="{% url 'course:list-lesson' course.id  %}">
                     <span class="glyphicon glyphicon-search" style="margin-left:10px"></span></a>
+                <a href="{% url 'course:lessons-list' course.id  %}">
+                    <span class="glyphicon glyphicon-book" style="margin-left:10px"></span></a>
 </td>
         </tr>
     {% endfor %}
