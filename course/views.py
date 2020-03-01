@@ -1,7 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView,ListView,CreateView,DeleteView,UpdateView
+from django.views.generic import View, TemplateView,ListView,CreateView,DeleteView,UpdateView
+from django.views.generic.base import TemplateResponseMixin
 from .models import Course,Lesson
 from django import forms
 import json
@@ -106,13 +107,27 @@ class CreateLessonView(LoginRequiredMixin,CreateView):
 
 class LessonListView(ListView):
     model=Lesson  # equal to Course.objects.all()
-    # queryset=Course.objects.filter(id = 1)   # one method
-    # user=User.objects.filter(username = "")
+
 
     context_object_name="lessons"  # param  name of inside tempalte
     template_name="course/lesson_list.html"
 
     def get_queryset(self):
         qs=super(LessonListView,self).get_queryset()
-        # return qs.filter(id = 1)
         return qs
+
+class ListLessonView(LoginRequiredMixin,TemplateResponseMixin,View):
+    template_name="course/list_lesson.html"
+
+    def get(self,request,course_id):
+        course=get_object_or_404(Course,id=course_id)
+        return self.render_to_response({'course':course})
+
+class DetailLessonView(LoginRequiredMixin,TemplateResponseMixin,View):
+    login_url="account/login/"
+    template_name="course/detail_lesson.html"
+
+    def get(self,request,lesson_id):
+        lesson=get_object_or_404(Lesson,id=lesson_id)
+        return self.render_to_response({"lesson":lesson})
+        

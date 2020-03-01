@@ -1,24 +1,28 @@
 {% extends "base.html" %}
-{% block title %}
-lesson List
-{% endblock %}
-{% block content %}
-<table class="table table-hover">
-    <tr>
-        <td>line</td>
-        <td>title</td>
-        <td>tutor</td>
-        <td>published</td>
-        <td>diy order</td>
-    </tr>
-    {% for lesson in lessons %}
-        <tr id={{ forloop.counter }}>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ lesson.title }}</td>
-            <td>{{ lesson.user.username }}</td>
-            <td>{{ lesson.created }}</td>
-            <td>{{ lesson.order }}</td>
+
+
+    {% block title %}
+    lesson List
+    {% endblock %}
+    {% block content %}
+    <table class="table table-hover">
+        <tr>
+            <td>line</td>
+            <td>course</td>
+            <td>title</td>
+            <td>tutor</td>
+            <td>published</td>
+            <td>diy order</td>
         </tr>
-    {% endfor %}
-</table>
-{% endblock %}
+        {% for lesson in lessons %}
+            <tr id={{ forloop.counter }}>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ lesson.course }}</td>
+                <td>{{ lesson.title }}</td>
+                <td>{{ lesson.user.username }}</td>
+                <td>{{ lesson.created }}</td>
+                <td>{{ lesson.order }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endblock %}
