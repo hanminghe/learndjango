@@ -32,4 +32,5 @@ urlpatterns = [
     path('my-information',views.myself,name="my-information"),
     path('my-information-edit',views.myself_edit,name="my-information-edit"),
     path('my-image',views.my_image,name="my-image"),
+    path('test',views.test,name="test"),
 ]

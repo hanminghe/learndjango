@@ -7,7 +7,24 @@ from .models import UserProfile,UserInfo
 from django.contrib.auth.models import User
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.urls import reverse
-# Create your views here.
+
+import hashlib
+
+def test1(request):
+    sha = hashlib.sha1()
+    sha.update('word_a'.encode())
+    sha.update('word_b'.encode())
+    digest = sha.hexdigest()
+    return HttpResponse(digest)
+
+def test(request):
+    if request.method=="GET":
+        a=request.GET
+        # HttpResponse(int(a['a'])+int(a['b']))
+        
+
+    return HttpResponse(a['a']+a['b'])
+
 def userlogin(request):
     if request.method=="GET":
         loginform=LoginForm()
