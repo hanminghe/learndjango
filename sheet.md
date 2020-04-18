@@ -68,3 +68,4 @@ cd /quiz
 source /venv/bin/activate
 exec gunicorn -w 4 -b 127.0.0.1:888 --worker-class eventlet --log-level debug --capture-output --access-logfile /tmp/gunicorn-access.log --error-logfile /tmp/gunicorn-error.log -t 120 app:app
  ```
+ Flask Gunicorn Supervisor Nginx 项目部署小总结 [link](https://gist.github.com/binderclip/f6b6f5ed4d71fa64c7c5#file-deploy-flask-gunicorn-supervisor-nginx-md)
